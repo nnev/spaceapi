@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	gitRepo     = "/home/mero/src/www-nnev"
+	gitRepo     = "/srv/git/website.git"
 	uniLocation = Location{
 		Address: "Im Neuenheimer Feld 368, 69120 Heidelberg",
 		Lat:     49.41759,
