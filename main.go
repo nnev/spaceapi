@@ -8,12 +8,23 @@ import (
 )
 
 var (
-	p = NewPinger("chaostreff.vpn.zekjur.net", time.Minute)
+	pinger    = NewPinger("chaostreff.vpn.zekjur.net", time.Minute)
+	locpoller = NewLocationPoller(10 * time.Minute)
 )
 
 func HandleGet(res http.ResponseWriter, req *http.Request) {
 	ep := NewEndpoint()
-	ep.State.Open = p.GetState()
+	ep.Location = locpoller.Get()
+	if ep.Location == uniLocation {
+		ep.State.Open = pinger.GetState()
+	} else {
+		now := time.Now()
+		if now.Weekday() == time.Thursday && now.Day() < 8 && now.Hour() >= 19 && now.Hour() < 22 {
+			ep.State.Open = True
+		} else {
+			ep.State.Open = False
+		}
+	}
 
 	enc := json.NewEncoder(res)
 	err := enc.Encode(ep)

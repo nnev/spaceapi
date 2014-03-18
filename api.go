@@ -23,7 +23,7 @@ type Endpoint struct {
 }
 
 type Location struct {
-	Address string
+	Address string  `json:"address"`
 	Lat     float32 `json:"lat"`
 	Lon     float32 `json:"lon"`
 }
