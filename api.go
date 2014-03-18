@@ -51,7 +51,7 @@ func NewEndpoint() *Endpoint {
 
 	ep.Api = "0.13"
 	ep.Space = "Chaostreff Heidelberg"
-	ep.Logo = "https://www.noname-ev.de//img/noname.svg"
+	ep.Logo = "https://www.noname-ev.de/img/noname.svg"
 	ep.Url = "https://www.noname-ev.de/"
 
 	ep.Location = Location{
