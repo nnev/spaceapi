@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -34,6 +37,9 @@ func HandleGet(res http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	c := make(chan os.Signal)
+	signal.Notify(c, syscall.SIGPIPE)
+
 	http.HandleFunc("/spaceapi.json", HandleGet)
 
 	err := http.ListenAndServe("localhost:5124", nil)
