@@ -15,11 +15,14 @@ type Pinger struct {
 
 func NewPinger(host string, interval time.Duration) *Pinger {
 	p := &Pinger{}
+	p.available = Undefined
 	p.mtx = &sync.RWMutex{}
 	p.done = make(chan struct{})
 	p.tick = time.NewTicker(interval)
 
 	go func() {
+		state_change_pings := 0
+
 		for {
 			select {
 			case <-p.tick.C:
@@ -32,7 +35,15 @@ func NewPinger(host string, interval time.Duration) *Pinger {
 				}
 
 				p.mtx.Lock()
-				p.available = available
+				if p.available != available {
+					state_change_pings++
+				} else {
+					state_change_pings = 0
+				}
+				if state_change_pings > 4 {
+					p.available = available
+					state_change_pings = 0
+				}
 				p.mtx.Unlock()
 			case <-p.done:
 				return
